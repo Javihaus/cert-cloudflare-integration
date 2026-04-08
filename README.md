@@ -3,16 +3,13 @@
   
 </div>
 
----
 <div align="center">
   
-![Version](https://img.shields.io/badge/version-5.0.0-3F1D50)
 ![License](https://img.shields.io/badge/license-Apache%202.0-BB3381)
 ![Wrangler](https://img.shields.io/badge/wrangler-4.x-F6821F)
 ![Status](https://img.shields.io/badge/demo-live-4FB3B3)
 
 </div>
----
 
 # CERT + Cloudflare AI Gateway
 
@@ -112,8 +109,13 @@ Response headers on every proxied call:
 - `X-CERT-Grounding-Pending: true` — trace queued for evaluation
 - `X-CERT-Project: {project-name}` — which CERT project received the trace
 
-## Links
+## App
 
 - [CERT Dashboard](https://cert-framework.com)
-- [Research paper](https://arxiv.org/abs/2512.13771)
-- [Main repository](https://github.com/Javihaus/cert-framework)
+
+## Research
+
+- [A Geometric Taxonomy of Hallucinations in LLMs](https://arxiv.org/pdf/2602.13224)
+- [How Transformers Reject Wrong Answers: Rotational Dynamics of Factual Constraint Processing](https://arxiv.org/abs/2603.13259)
+- [Semantic Grounding Index: Geometric Bounds on Context Engagement in RAG Systems](https://arxiv.org/abs/2512.13771)
+
