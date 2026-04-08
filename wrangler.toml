@@ -1,7 +1,7 @@
-name = "cert-gateway-demo"
+name = "cert-gateway"
 preview_urls = false
 main = "src/index.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-01-01"
 
 [vars]
 CERT_DASHBOARD_URL = "https://cert-framework.com"
