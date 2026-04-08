@@ -122,6 +122,8 @@ export default {
 
     // Return original gateway response with CERT headers appended
     const responseHeaders = new Headers(gatewayResponse.headers);
+    responseHeaders.delete("content-encoding");
+    responseHeaders.delete("content-length");
     responseHeaders.set("X-CERT-Grounding-Pending", "true");
     responseHeaders.set("X-CERT-Project", env.CERT_PROJECT || "cloudflare-gateway");
 
@@ -195,9 +197,10 @@ async function postToCert(
   dashboardUrl: string,
   payload: CertTracePayload
 ): Promise<void> {
-  const url = `${dashboardUrl.replace(/\/$/, "")}/api/v1/traces`;
+  const base = (dashboardUrl || "https://cert-framework.com").replace(/\/$/, "");
+  const url = `${base}/api/v1/traces`;
   try {
-    await fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -205,8 +208,12 @@ async function postToCert(
       },
       body: JSON.stringify(payload),
     });
+    if (!response.ok) {
+      // Log but do not throw — CERT logging failure must not affect
+      // the proxied LLM response already sent to the client
+      console.error(`CERT trace POST failed: HTTP ${response.status}`);
+    }
   } catch (err) {
-    // Non-fatal — gateway operation is unaffected by CERT logging failure
     console.error("CERT trace POST failed:", err);
   }
 }
