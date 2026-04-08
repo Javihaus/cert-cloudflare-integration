@@ -23,7 +23,7 @@ wrangler secret put CF_GATEWAY_ID
 wrangler deploy
 ```
 
-## Usage
+## How to start
 
 Change your OpenAI base URL from:
 ```
