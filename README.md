@@ -109,7 +109,7 @@ Response headers on every proxied call:
 - `X-CERT-Grounding-Pending: true` — trace queued for evaluation
 - `X-CERT-Project: {project-name}` — which CERT project received the trace
 
-## App
+## Dashboard
 
 - [CERT Dashboard](https://cert-framework.com)
 
