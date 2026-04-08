@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/data/cert_new_02_26.png" alt="CERT" width="180" />
+<img src="data/cert_new_02_26.png" alt="CERT" width="180" />
   
 </div>
 
