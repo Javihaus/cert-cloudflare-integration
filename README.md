@@ -4,6 +4,15 @@
 </div>
 
 ---
+<div align="center">
+  
+![Version](https://img.shields.io/badge/version-5.0.0-3F1D50)
+![License](https://img.shields.io/badge/license-Apache%202.0-BB3381)
+![Wrangler](https://img.shields.io/badge/wrangler-4.x-F6821F)
+![Status](https://img.shields.io/badge/demo-live-4FB3B3)
+
+</div>
+---
 
 # CERT + Cloudflare AI Gateway
 
@@ -11,17 +20,29 @@ Cloudflare Worker that adds hallucination detection to every LLM call
 via Cloudflare AI Gateway. Uses `ctx.waitUntil()` to log traces to CERT 
 asynchronously — zero latency added to the LLM response.
 
+
 ## How it works
-┌─────────┐     ┌──────────────────┐     ┌─────────────────┐     ┌──────────────┐
-│  Client │────▶│  CERT Worker     │────▶│ CF AI Gateway   │────▶│ LLM Provider │
-└─────────┘     │                  │     └─────────────────┘     └──────────────┘
-      ▲          │  1. Forward req  │◀────────────────────────────── response
-      │          │  2. Return resp  │
-      └──────────│  ──────────────  │
-  zero latency   │  ctx.waitUntil() │     ┌─────────────────┐
-  to client      │  3. Log trace ──▶│────▶│ CERT Dashboard  │
-                 └──────────────────┘     │ (SGI/DGI score) │
-                                          └─────────────────┘
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant W as CERT Worker<br/>(Cloudflare)
+    participant G as CF AI Gateway
+    participant L as LLM Provider
+    participant D as CERT Dashboard
+
+    C->>W: POST /anthropic/v1/messages
+    W->>G: Forward request unchanged
+    G->>L: Route to provider (BYOK key injected)
+    L-->>G: LLM response
+    G-->>W: LLM response
+    W-->>C: LLM response + X-CERT-Grounding-Pending: true
+
+    Note over W,D: ctx.waitUntil() — runs after response delivered to client
+
+    W-)D: POST /api/v1/traces (async, non-blocking)
+    D-->>W: 200 OK — trace queued for SGI/DGI evaluation
+```
 
 ## Prerequisites
 
@@ -84,6 +105,7 @@ Route to any provider Cloudflare AI Gateway supports:
 Every successful LLM call appears in the CERT dashboard with:
 - **DGI score** for context-free responses (no RAG)
 - **SGI score** for grounded responses (system prompt contains `Context:`)
+- Response Quality (https://cert-framework.com/docs/quality-metrics)
 - Provider, model, latency, and evaluation status
 
 Response headers on every proxied call:
