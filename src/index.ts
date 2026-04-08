@@ -1,5 +1,5 @@
 /**
- * CERT + Cloudflare AI Gateway Integration Demo
+ * CERT + Cloudflare AI Gateway Integration
  *
  * Demonstrates CERT operating as a hallucination detection layer
  * over Cloudflare AI Gateway.
